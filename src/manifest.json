@@ -1,0 +1,23 @@
+{
+  "manifest_version": 3,
+  "name": "Semantic Ctrl+F",
+  "version": "1.0.0",
+  "description": "Find by meaning, not keywords. Search any page with EmbeddingGemma 2, running entirely on your device.",
+  "minimum_chrome_version": "116",
+  "permissions": ["activeTab", "scripting", "offscreen", "storage"],
+  "background": { "service_worker": "background.js", "type": "module" },
+  "action": {
+    "default_title": "Semantic Ctrl+F (Ctrl+Shift+F)",
+    "default_icon": { "16": "icons/16.png", "32": "icons/32.png", "48": "icons/48.png", "128": "icons/128.png" }
+  },
+  "icons": { "16": "icons/16.png", "32": "icons/32.png", "48": "icons/48.png", "128": "icons/128.png" },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": { "default": "Ctrl+Shift+F", "mac": "MacCtrl+Shift+F" },
+      "description": "Open Semantic Ctrl+F on this page"
+    }
+  },
+  "content_security_policy": {
+    "extension_pages": "script-src 'self' 'wasm-unsafe-eval'; object-src 'self'"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "semantic-ctrl-f",
+  "version": "1.0.0",
+  "description": "Semantic Ctrl+F: search any page by meaning with EmbeddingGemma 2, fully on-device",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "demo": "node scripts/build.mjs && node scripts/serve.mjs",
+    "test": "node test/engine.test.mjs"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "dependencies": {
+    "@huggingface/transformers": "^4.3.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

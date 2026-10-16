@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Northwind Outfitters · Help Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@400;600&family=Overpass:wght@600;800;900&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #eef2ee;   /* map paper */
+    --card: #ffffff;
+    --ink: #17302a;     /* spruce */
+    --moss: #4f6b5e;    /* secondary text */
+    --contour: #b4c7bb; /* topo lines, rules */
+    --blaze: #f2c230;   /* trail blaze = found by meaning */
+    --blaze-ink: #7a5a00;
+    --signal: #c8432b;  /* keyword miss */
+    --lake: #2f6f8f;    /* links, focus */
+    --band: #17302a;
+    --band-ink: #eef2ee;
+    --band-line: rgba(238, 242, 238, .14);
+    --display: "Overpass", "Segoe UI", system-ui, sans-serif;
+    --body: "Atkinson Hyperlegible", system-ui, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, "Cascadia Mono", monospace;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #111916; --card: #18221e; --ink: #e4ece6; --moss: #9bb0a5; --contour: #2d3f37;
+      --blaze-ink: #f2c230; --signal: #ff8a72; --lake: #8cc3dc;
+      --band: #0b1310; --band-ink: #e4ece6; --band-line: rgba(242, 194, 48, .12);
+      color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font: 17px/1.65 var(--body); }
+  a { color: var(--lake); }
+  :focus-visible { outline: 2px solid var(--lake); outline-offset: 2px; }
+  kbd { font: 600 12px var(--mono); padding: 2px 6px; border-radius: 5px; border: 1px solid var(--contour);
+    border-bottom-width: 2px; background: var(--card); color: var(--ink); white-space: nowrap; }
+
+  /* ---------- header band with contour lines ---------- */
+  .band { position: relative; overflow: hidden; background: var(--band); color: var(--band-ink); }
+  .band svg.topo { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .band svg.topo path { fill: none; stroke: var(--band-line); stroke-width: 1.2; }
+  .band svg.topo path.index { stroke-width: 2; }
+  .band .inner { position: relative; max-width: 1120px; margin: 0 auto; padding: 18px 24px 64px; }
+  .brand { display: flex; align-items: baseline; gap: 12px; font-family: var(--display); }
+  .brand b { font-weight: 900; font-size: 20px; letter-spacing: .01em; text-transform: uppercase; }
+  .brand span { opacity: .7; font-weight: 600; font-size: 15px; }
+
+  /* One left-aligned column: the right side of the map stays open for the find bar. */
+  .hero { display: grid; grid-template-columns: minmax(0, 640px); gap: 36px; margin-top: 56px; }
+  .eyebrow { display: inline-flex; align-items: center; gap: 8px; font: 600 13px var(--mono); letter-spacing: .04em;
+    color: var(--blaze); text-transform: uppercase; }
+  .eyebrow::before { content: ""; width: 14px; height: 6px; border-radius: 1px; background: var(--blaze); }
+  h1 { font: 900 clamp(38px, 5.4vw, 64px)/1 var(--display); letter-spacing: -.02em; margin: 16px 0 20px; text-wrap: balance; }
+  h1 mark { background: none; color: var(--blaze); }
+  .lede { max-width: 34em; margin: 0; font-size: 18px; opacity: .88; }
+  .lede + .lede { margin-top: 12px; font-size: 15px; opacity: .7; }
+
+  /* ---------- the race card ---------- */
+  .race { background: var(--card); color: var(--ink); border-radius: 16px; padding: 20px;
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 24px 48px -20px rgba(0,0,0,.45); }
+  .race h2 { margin: 0 0 12px; font: 800 14px var(--display); letter-spacing: .06em; text-transform: uppercase; color: var(--moss); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font: 15px var(--body); color: var(--ink); background: var(--paper); border: 1px solid var(--contour);
+    border-radius: 999px; padding: 7px 14px; cursor: pointer; transition: border-color .15s, background .15s; }
+  .chip:hover { border-color: var(--ink); }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .own { margin: 12px 0 0; font-size: 14px; color: var(--moss); }
+
+  .lanes { margin-top: 18px; display: grid; gap: 10px; }
+  .lane { display: grid; grid-template-columns: 118px 1fr; gap: 12px; align-items: start;
+    padding: 12px 14px; border-radius: 12px; background: var(--paper); min-height: 70px; }
+  .lane .who { font: 600 12px/1.5 var(--mono); color: var(--moss); padding-top: 2px; }
+  .lane .who strong { display: block; font: 800 15px var(--display); color: var(--ink); letter-spacing: 0; }
+  .lane .what { min-width: 0; font-size: 15px; }
+  .lane .big { font: 800 22px/1.2 var(--display); }
+  .lane.keyword .big { color: var(--signal); }
+  .lane.semantic { box-shadow: inset 4px 0 0 var(--blaze); }
+  .lane.semantic .big { font-size: 17px; }
+  .lane .sub { color: var(--moss); font-size: 14px; }
+  .lane .quote { margin: 6px 0 0; font-size: 14px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .lane .num { font: 600 13px var(--mono); color: var(--blaze-ink); }
+  .lane .idle { color: var(--moss); font-size: 14px; padding-top: 2px; }
+  .jump { font: 600 14px var(--body); background: none; border: 0; padding: 0; color: var(--lake); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+  .spec { margin: 14px 2px 0; font: 12px/1.6 var(--mono); color: var(--moss); }
+
+  /* ---------- help center ---------- */
+  .page { max-width: 1120px; margin: 0 auto; padding: 0 24px 96px; display: grid; grid-template-columns: 220px 1fr; gap: 56px; }
+  nav.toc { position: sticky; top: 24px; align-self: start; margin-top: 40px; font-size: 15px; }
+  .toc p { margin: 0 0 10px; font: 800 12px var(--display); letter-spacing: .08em; text-transform: uppercase; color: var(--moss); }
+  .toc ol { list-style: none; margin: 0; padding: 0; border-left: 2px solid var(--contour); }
+  .toc a { display: flex; align-items: center; gap: 8px; padding: 5px 0 5px 14px; margin-left: -2px;
+    border-left: 2px solid transparent; color: var(--ink); text-decoration: none; }
+  .toc a:hover { border-left-color: var(--moss); }
+  /* Blaze marks sections that hold a semantic match. */
+  .toc a.found { border-left-color: var(--blaze); font-weight: 700; }
+  .toc a.found::after { content: ""; width: 10px; height: 5px; border-radius: 1px; background: var(--blaze); }
+
+  main { max-width: 680px; padding-top: 24px; }
+  main h2 { font: 800 26px/1.2 var(--display); letter-spacing: -.01em; margin: 48px 0 10px; scroll-margin-top: 24px; }
+  main p { margin: 0 0 14px; }
+  main h2 + p { margin-top: 0; }
+  .contact { margin-top: 56px; padding-top: 20px; border-top: 1px solid var(--contour); color: var(--moss); font-size: 15px; }
+
+  @media (max-width: 900px) {
+    .hero { gap: 28px; margin-top: 36px; }
+    .page { grid-template-columns: 1fr; gap: 0; }
+    nav.toc { display: none; }
+  }
+  @media (max-width: 480px) {
+    body { font-size: 16px; }
+    .band .inner, .page { padding-left: 16px; padding-right: 16px; }
+    .lane { grid-template-columns: 1fr; gap: 4px; }
+  }
+</style>
+</head>
+<body>
+<header class="band" data-sctrlf-ignore>
+  <svg class="topo" aria-hidden="true" preserveAspectRatio="xMidYMid slice"></svg>
+  <div class="inner">
+    <div class="brand"><b>Northwind Outfitters</b><span>Help Center</span></div>
+
+    <div class="hero">
+      <div>
+        <span class="eyebrow">Semantic Ctrl+F</span>
+        <h1>The words aren't on the page. <mark>The answer is.</mark></h1>
+        <p class="lede">Ctrl+F only finds the exact letters you type. Semantic Ctrl+F finds what you mean, using EmbeddingGemma 2 running inside your browser.</p>
+        <p class="lede">Nothing you type or read here leaves this tab.</p>
+      </div>
+
+      <section class="race" aria-labelledby="race-title">
+        <h2 id="race-title">Ask this help page a question</h2>
+        <div class="chips" role="group" aria-label="Sample questions">
+          <button class="chip" aria-pressed="false">Can I get my money back?</button>
+          <button class="chip" aria-pressed="false">It arrived broken</button>
+          <button class="chip" aria-pressed="false">Do you sell my data?</button>
+          <button class="chip" aria-pressed="false">Is this ok for kids?</button>
+          <button class="chip" aria-pressed="false">Parlez-vous français ?</button>
+        </div>
+        <p class="own">Or press <kbd>Ctrl</kbd> <kbd>Shift</kbd> <kbd>F</kbd> and type your own.</p>
+
+        <div class="lanes" aria-live="polite">
+          <div class="lane keyword">
+            <div class="who"><strong>Ctrl+F</strong>exact text</div>
+            <div class="what" id="kw"><span class="idle">Pick a question above.</span></div>
+          </div>
+          <div class="lane semantic">
+            <div class="who"><strong>Semantic</strong>by meaning</div>
+            <div class="what" id="sem"><span class="idle">Pick a question above.</span></div>
+          </div>
+        </div>
+        <p class="spec">EmbeddingGemma 2 · 270M text model · 4-bit · about 160 MB, downloaded once</p>
+      </section>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+  <nav class="toc" aria-label="Sections">
+    <p>On this page</p>
+    <ol>
+      <li><a href="#ordering">Ordering</a></li>
+      <li><a href="#shipping">Shipping</a></li>
+      <li><a href="#returns">Returns and exchanges</a></li>
+      <li><a href="#damaged">Damaged or faulty gear</a></li>
+      <li><a href="#care">Product care</a></li>
+      <li><a href="#sizing">Sizing</a></li>
+      <li><a href="#privacy">Your account and privacy</a></li>
+      <li><a href="#sustainability">Sustainability</a></li>
+    </ol>
+  </nav>
+
+  <main>
+    <h2 id="ordering">Ordering</h2>
+    <p>Orders placed before 2 p.m. Eastern on a business day leave our Columbus, Ohio warehouse the same afternoon. Anything placed later is packed first thing the next morning.</p>
+    <p>You can change the size or colour of an item for up to one hour after checkout from the Orders page. After that the parcel is already moving through our packing line and we can no longer intercept it.</p>
+    <p>We accept all major cards, PayPal and Northwind gift cards. Gift cards never expire and can be combined with a card payment at checkout.</p>
+
+    <h2 id="shipping">Shipping</h2>
+    <p>Standard delivery takes three to five business days within the contiguous United States and is free on orders over $75. Express delivery arrives in one to two business days for a flat $18.</p>
+    <p>We ship to Canada, the United Kingdom, the European Union, Australia and Japan. International customers are responsible for import duties, which our carrier collects at the door.</p>
+    <p>Every parcel includes a tracking link sent by email. If the tracking page hasn't updated in four days, write to us and we will open an investigation with the carrier.</p>
+
+    <h2 id="returns">Returns and exchanges</h2>
+    <p>Changed your mind? Send any unworn item back within 60 days and we will credit the full amount to your original payment method within five business days of it reaching us.</p>
+    <p>Exchanges for a different size are free in both directions. Print the prepaid label from your account, drop the parcel at any UPS location, and the replacement ships as soon as the return is scanned.</p>
+    <p>Sale items marked “final” and personalised items with custom embroidery can't be sent back, though they are still covered by the workmanship guarantee below.</p>
+
+    <h2 id="damaged">Damaged or faulty gear</h2>
+    <p>If a parcel shows up crushed, torn or with something missing, take a photo before opening it fully and send it to support within seven days. We'll dispatch a replacement immediately, no need to wait for the original to come back.</p>
+    <p>Our workmanship guarantee lasts for the lifetime of the product. Broken zips, failed seams and delaminating soles are repaired or replaced at no cost; normal wear, like faded fabric or worn tread, is not covered.</p>
+
+    <h2 id="care">Product care</h2>
+    <p>Wash waterproof shells cold on a gentle cycle with a technical cleaner, never fabric softener, which clogs the membrane. Tumble dry on low for twenty minutes to reactivate the water-repellent finish.</p>
+    <p>Leather boots should be brushed clean after every muddy hike and treated with wax twice a season. Let them dry slowly at room temperature; placing them next to a radiator will crack the leather.</p>
+    <p>Store down sleeping bags loose in the large cotton sack they came with rather than the compression sack, so the insulation keeps its loft for years.</p>
+
+    <h2 id="sizing">Sizing</h2>
+    <p>Our jackets have an athletic cut. If you plan to wear a thick fleece underneath, or you are between sizes, choose the larger one.</p>
+    <p>The youth range covers ages 6 to 14, and every piece in it passes CPSIA testing for lead and phthalates. Hoods on youth jackets detach with snaps instead of drawcords, which can catch on playground equipment.</p>
+
+    <h2 id="privacy">Your account and privacy</h2>
+    <p>We only use your address and order history to fulfil purchases and, if you opt in, to send our seasonal catalogue. We never rent, trade or hand your personal information to advertisers or data brokers.</p>
+    <p>You can download everything we hold about you, or permanently erase your account, from Settings → Privacy. Erasure completes within 30 days, apart from invoices we're legally required to keep.</p>
+    <p>Notre service client répond aussi en français : écrivez-nous et un conseiller francophone vous répondra sous 24 heures.</p>
+
+    <h2 id="sustainability">Sustainability</h2>
+    <p>Since 2023 every jacket uses recycled nylon, and our down is certified to the Responsible Down Standard. Shipping boxes are made from 100% recycled cardboard with paper tape.</p>
+    <p>Through Northwind Renew, bring back any used Northwind product to a store and get a $20 voucher. Gear in good shape is cleaned and resold; the rest is recycled into insulation.</p>
+
+    <p class="contact">Our team in Columbus answers chat and email seven days a week from 8 a.m. to 8 p.m. Eastern. For anything urgent, phone 1-800-555-0142.</p>
+  </main>
+</div>
+<script type="module" src="demo.js"></script>
+</body>
+</html>
